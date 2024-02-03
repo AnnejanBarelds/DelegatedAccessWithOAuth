@@ -1,0 +1,41 @@
+﻿@page "/getusercount"
+
+<PageTitle>User count</PageTitle>
+
+@using Microsoft.Identity.Web;
+@using Web.Data
+@inject IBackendService BackendService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+
+<h1>Profile</h1>
+
+<p>This component demonstrates getting the user count from the Graph API.</p>
+
+@if (userCountResult == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p><em>@userCountResult.Count</em></p>
+    <details>
+        <summary>Token</summary>
+        <p>@userCountResult.Token</p>
+    </details>
+}
+
+@code {
+    private UserCountResult? userCountResult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            userCountResult = await BackendService.GetUserCount();
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+    }
+}

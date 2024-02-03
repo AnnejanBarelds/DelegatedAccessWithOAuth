@@ -1,0 +1,60 @@
+﻿@page "/fetchtodo"
+
+<PageTitle>Todo list</PageTitle>
+
+@using Microsoft.Identity.Web;
+@using Web.Data
+@inject IBackendService BackendService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+
+<h1>Todo list</h1>
+
+<p>This component demonstrates fetching data from a database.</p>
+
+@if (todoResult == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Due date</th>
+                <th>Completed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var todo in todoResult.Todos)
+            {
+                <tr>
+                    <td>@todo.Task</td>
+                    <td>@todo.DueDate</td>
+                    <td>@todo.Completed</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <details>
+        <summary>Token</summary>
+        <p>@todoResult.Token</p>
+    </details>
+}
+
+@code {
+    private TodoResult? todoResult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            todoResult = await BackendService.GetTodos();
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+    }
+}

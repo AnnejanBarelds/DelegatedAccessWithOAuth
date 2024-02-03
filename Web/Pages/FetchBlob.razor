@@ -1,0 +1,41 @@
+﻿@page "/fetchblob"
+
+<PageTitle>Blob content</PageTitle>
+
+@using Microsoft.Identity.Web;
+@using Web.Data
+@inject IBackendService BackendService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+
+<h1>Todo list</h1>
+
+<p>This component demonstrates fetching the contents of a blob from Blob Storage.</p>
+
+@if (blobResult == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p><em>@blobResult.Content</em></p>
+    <details>
+        <summary>Token</summary>
+        <p>@blobResult.Token</p>
+    </details>
+}
+
+@code {
+    private BlobResult? blobResult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            blobResult = await BackendService.GetBlob();
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+    }
+}

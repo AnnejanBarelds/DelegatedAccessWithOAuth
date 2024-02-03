@@ -1,0 +1,41 @@
+﻿@page "/readprofile"
+
+<PageTitle>Profile content</PageTitle>
+
+@using Microsoft.Identity.Web;
+@using Web.Data
+@inject IBackendService BackendService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+
+<h1>Profile</h1>
+
+<p>This component demonstrates reading the profile from the Graph API.</p>
+
+@if (profileResult == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p><em>@profileResult.Result</em></p>
+    <details>
+        <summary>Token</summary>
+        <p>@profileResult.Token</p>
+    </details>
+}
+
+@code {
+    private ProfileResult? profileResult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            profileResult = await BackendService.GetProfile();
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+    }
+}
