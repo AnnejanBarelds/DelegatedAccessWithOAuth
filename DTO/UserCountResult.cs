@@ -1,4 +1,4 @@
-﻿namespace Web.Data
+﻿namespace DTO
 {
     public class UserCountResult
     {

@@ -1,11 +1,12 @@
 ﻿using Azure.Core;
 using Microsoft.Identity.Web;
 
-namespace ApplicationAPI
+namespace BackendService
 {
     public class OnBehalfOfTokenCredential : TokenCredential
     {
-        internal event EventHandler<string>? TokenAcquired;
+        // Only there for demo purposes; remove when using this for your own purposes
+        internal static event EventHandler<string>? TokenAcquired;
 
         private readonly ITokenAcquisition _tokenAcquisition;
 

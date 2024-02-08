@@ -1,8 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 
-namespace ApplicationAPI
+namespace BackendService
 {
-    public interface IAzureClientFactory: IAsyncDisposable
+    public interface IAzureClientFactory: IAsyncDisposable, IDisposable
     {
         BlobServiceClient GetBlobClient(Uri serviceUri);
     }

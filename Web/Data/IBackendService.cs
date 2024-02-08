@@ -1,11 +1,12 @@
-﻿using Refit;
+﻿using DTO;
+using Refit;
 
 namespace Web.Data
 {
     public interface IBackendService
     {
-        [Get("/WeatherForecast")]
-        public Task<WeatherForecast[]> GetForecast(DateTime startDate);
+        [Get("/Weather")]
+        public Task<WeatherForecastResult> GetForecast(DateTime startDate);
 
         [Get("/Todo")]
         public Task<TodoResult> GetTodos();

@@ -5,7 +5,11 @@ VisualStudioVersion = 17.7.34302.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{5B09A184-3AD0-42CD-B834-19BFCBD968F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationAPI", "ApplicationAPI\ApplicationAPI.csproj", "{FD2FDB84-3F45-4511-B047-B121FBD815E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendService", "ApplicationAPI\BackendService.csproj", "{FD2FDB84-3F45-4511-B047-B121FBD815E5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApi", "ApplicationAPI2\WeatherApi.csproj", "{1E5ECFD6-8724-4A67-9E2A-C94A306CFE16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO", "DTO\DTO.csproj", "{9C3852DE-1DE8-4227-A386-BF1C99C1C129}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{FD2FDB84-3F45-4511-B047-B121FBD815E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD2FDB84-3F45-4511-B047-B121FBD815E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD2FDB84-3F45-4511-B047-B121FBD815E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E5ECFD6-8724-4A67-9E2A-C94A306CFE16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E5ECFD6-8724-4A67-9E2A-C94A306CFE16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E5ECFD6-8724-4A67-9E2A-C94A306CFE16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E5ECFD6-8724-4A67-9E2A-C94A306CFE16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C3852DE-1DE8-4227-A386-BF1C99C1C129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C3852DE-1DE8-4227-A386-BF1C99C1C129}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C3852DE-1DE8-4227-A386-BF1C99C1C129}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C3852DE-1DE8-4227-A386-BF1C99C1C129}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

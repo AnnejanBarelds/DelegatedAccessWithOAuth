@@ -1,11 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BackendService.Data;
+using DTO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Graph;
 using Microsoft.Graph.Models.ODataErrors;
+using Microsoft.Identity.Web.Resource;
 
-namespace ApplicationAPI.Controllers
+namespace BackendService.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class GraphController : ControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -14,7 +20,7 @@ namespace ApplicationAPI.Controllers
         public GraphController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-            GraphAuthenticationMessageHandler.TokenAcquired += OnTokenAcquired;
+            GraphApiHandler.TokenAcquired += OnTokenAcquired;
         }
 
         private void OnTokenAcquired(object? sender, string e)

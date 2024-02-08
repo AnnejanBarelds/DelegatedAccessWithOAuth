@@ -1,14 +1,11 @@
+using BackendService.Configuration;
+using BackendService.Data;
 using Azure.Core;
-using Azure.Identity;
-using Azure.Storage.Blobs;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.Primitives;
 using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.Resource;
+using Refit;
 
-namespace ApplicationAPI
+namespace BackendService
 {
     public class Program
     {
@@ -26,8 +23,17 @@ namespace ApplicationAPI
             builder.Services.AddScoped<TokenCredential, OnBehalfOfTokenCredential>();
 
             builder.Services.AddHttpClient("Graph")
-                .AddHttpMessageHandler<GraphAuthenticationMessageHandler>();
-            builder.Services.AddScoped<GraphAuthenticationMessageHandler>();
+                .AddHttpMessageHandler<GraphApiHandler>();
+            builder.Services.AddScoped<GraphApiHandler>();
+
+            builder.Services.AddScoped<WeatherApiHandler>();
+            builder.Services.AddRefitClient<IWeatherApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:7016"))
+                .AddHttpMessageHandler<WeatherApiHandler>();
+
+            builder.Services.AddOptions<SqlOptions>().BindConfiguration(typeof(SqlOptions).Name);
+            builder.Services.AddOptions<StorageOptions>().BindConfiguration(typeof(StorageOptions).Name);
+            builder.Services.AddOptions<WeatherApiOptions>().BindConfiguration(typeof(WeatherApiOptions).Name);
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

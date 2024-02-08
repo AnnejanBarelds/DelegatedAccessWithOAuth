@@ -1,21 +1,24 @@
 ﻿using Microsoft.Identity.Web;
 
-namespace ApplicationAPI
+namespace BackendService.Data
 {
-    public class GraphAuthenticationMessageHandler : DelegatingHandler
+    public class GraphApiHandler : DelegatingHandler
     {
+        private const string Scope = "https://graph.microsoft.com/.default";
+
+        // Only there for demo purposes; remove when using this for your own purposes
         internal static event EventHandler<string>? TokenAcquired;
 
         private readonly ITokenAcquisition _tokenAcquisition;
 
-        public GraphAuthenticationMessageHandler(ITokenAcquisition tokenAcquisition)
+        public GraphApiHandler(ITokenAcquisition tokenAcquisition)
         {
             _tokenAcquisition = tokenAcquisition;
         }
 
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var token = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { "https://graph.microsoft.com/.default" });
+            var token = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { Scope });
             TokenAcquired?.Invoke(this, token);
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             request.Headers.Add("ConsistencyLevel", "eventual"); // Only needed for the $count query

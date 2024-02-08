@@ -1,4 +1,4 @@
-﻿namespace ApplicationAPI
+﻿namespace DTO
 {
     public class TodoResult
     {

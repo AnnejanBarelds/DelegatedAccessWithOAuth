@@ -2,6 +2,7 @@
 
 <PageTitle>Weather forecast</PageTitle>
 
+@using DTO;
 @using Microsoft.Identity.Web;
 @using Web.Data
 @inject IBackendService BackendService
@@ -11,7 +12,7 @@
 
 <p>This component demonstrates fetching data from a service.</p>
 
-@if (forecasts == null)
+@if (forecast == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -27,7 +28,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var forecast in forecast.Forecasts)
             {
                 <tr>
                     <td>@forecast.Date.ToShortDateString()</td>
@@ -38,16 +39,20 @@ else
             }
         </tbody>
     </table>
+    <details>
+        <summary>Token</summary>
+        <p>@forecast.Token</p>
+    </details>
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private WeatherForecastResult? forecast;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            forecasts = await BackendService.GetForecast(DateTime.Now);
+            forecast = await BackendService.GetForecast(DateTime.Now);
         }
         catch (Exception ex)
         {

@@ -1,9 +1,8 @@
 ﻿using Azure.Core;
 using Azure.Storage.Blobs;
-using Microsoft.Identity.Web;
 using System.Collections.Concurrent;
 
-namespace ApplicationAPI
+namespace BackendService
 {
     public class AzureClientFactory : IAzureClientFactory
     {
@@ -27,6 +26,11 @@ namespace ApplicationAPI
         {
             // No-op, but implement when using disposable clients, such as Service Bus Clients
             return ValueTask.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            // No-op, but implement when using disposable clients, such as Service Bus Clients
         }
     }
 }

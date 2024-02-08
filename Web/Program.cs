@@ -1,13 +1,9 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using Web.Data;
 using Refit;
+using Web.Configuration;
+using Web.Data;
 
 namespace Web
 {
@@ -18,9 +14,10 @@ namespace Web
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddOptions<BackendServiceOptions>().BindConfiguration(typeof(BackendServiceOptions).Name);
             builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-                .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"), subscribeToOpenIdConnectMiddlewareDiagnosticsEvents: true)
-                .EnableTokenAcquisitionToCallDownstreamApi(new[] { "" })
+                .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
+                .EnableTokenAcquisitionToCallDownstreamApi(new[] { $"api://{builder.Configuration["BackendServiceOptions:ClientId"]}/.default" })
                 .AddInMemoryTokenCaches();
             builder.Services.AddControllersWithViews()
                 .AddMicrosoftIdentityUI();
@@ -34,7 +31,7 @@ namespace Web
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor()
                 .AddMicrosoftIdentityConsentHandler();
-            builder.Services.AddTransient<BackendServiceHandler>();
+            builder.Services.AddScoped<BackendServiceHandler>();
             builder.Services.AddRefitClient<IBackendService>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:7206"))
                 .AddHttpMessageHandler<BackendServiceHandler>();

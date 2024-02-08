@@ -1,12 +1,12 @@
-﻿using Azure.Core;
+﻿using BackendService.Configuration;
 using Azure.Storage.Blobs;
+using DTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Azure;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web.Resource;
 
-namespace ApplicationAPI.Controllers
+namespace BackendService.Controllers
 {
     [Authorize]
     [Route("[controller]")]
@@ -14,15 +14,15 @@ namespace ApplicationAPI.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class BlobController : ControllerBase
     {
+        private readonly StorageOptions _storageOptions;
         private readonly BlobServiceClient _blobServiceClient;
-        private readonly OnBehalfOfTokenCredential _onBehalfOfTokenCredential;
         private string? _lastAccessToken;
 
-        public BlobController(IAzureClientFactory azureClientFactory, TokenCredential tokenCredential)
+        public BlobController(IAzureClientFactory azureClientFactory, IOptions<StorageOptions> storageOptions)
         {
-            _blobServiceClient = azureClientFactory.GetBlobClient(new Uri(""));
-            _onBehalfOfTokenCredential = (OnBehalfOfTokenCredential)tokenCredential;
-            _onBehalfOfTokenCredential.TokenAcquired += OnTokenAcquired;
+            _storageOptions = storageOptions.Value;
+            _blobServiceClient = azureClientFactory.GetBlobClient(new Uri(_storageOptions.Url));
+            OnBehalfOfTokenCredential.TokenAcquired += OnTokenAcquired;
         }
 
         private void OnTokenAcquired(object? sender, string e)
@@ -33,7 +33,7 @@ namespace ApplicationAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var containerClient = _blobServiceClient.GetBlobContainerClient("container1");
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_storageOptions.ContainerName);
             var blobClient = containerClient.GetBlobClient("test.txt");
             await using var stream = await blobClient.OpenReadAsync();
             using var reader = new StreamReader(stream);
