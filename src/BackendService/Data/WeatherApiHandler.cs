@@ -4,9 +4,9 @@ using Microsoft.Identity.Web;
 
 namespace BackendService.Data
 {
-    // Only there for demo purposes; remove when using this for your own purposes
     public class WeatherApiHandler: DelegatingHandler
     {
+        // Only there for demo purposes; remove when using this for your own purposes
         internal static event EventHandler<string>? TokenAcquired;
 
         private readonly WeatherApiOptions _weatherApiOptions;
